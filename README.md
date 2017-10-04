@@ -4,6 +4,8 @@
 
 Latest release (if you don't want to build it yourself) is available [here](https://github.com/IAmPicard/STTVoyage/releases).
 
+[More tools and information here](https://iampicard.github.io/)
+
 ## Features
 
 ### Monitor the captain's log and current voyage status
