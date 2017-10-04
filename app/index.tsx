@@ -35,12 +35,15 @@ const skillRes:{ [index:string] : {name: string, url: string} } = {
 
 //https://semantic-ui.com/elements/image.html#size
 class App extends React.Component<any, IAppState> {
+    userFeedback: any;
+
     constructor() {
         super();
 
         this._onAccessToken = this._onAccessToken.bind(this);
         this._renderVoyageLogPage = this._renderVoyageLogPage.bind(this);
         this._renderFeedbackPage = this._renderFeedbackPage.bind(this);
+        this._sendFeedback = this._sendFeedback.bind(this);
 
         this.state = {
             showSpinner: false,
@@ -52,6 +55,14 @@ class App extends React.Component<any, IAppState> {
             filter: '',
             spinnerLabel: 'Loading data...',
         };
+
+        this.userFeedback = {
+			feature: '',
+			bug: '',
+			other: '',
+			nameSuggestion: 'VoyageMonitor 0.1.0',
+			email: '',
+		};
 
         STTApi.loginWithCachedAccessToken().then((success) => {
             if (success) {
@@ -199,15 +210,51 @@ class App extends React.Component<any, IAppState> {
             </div></div>);
     }
 
+    _sendFeedback() {
+		STTApi.submitUserFeedback(this.userFeedback).then(() => {
+            (window as any).showLocalNotification('Thank you for your feedback!\nAll feedback helps me prioritize my work to deliver the most value.');
+		});
+	}
+
     _renderFeedbackPage() {
-        return <div>
-            <h1>Star Trek Timelines Voyage Monitor v0.0.4</h1>
+        return <div className="ui text container">
+            <h2 className="ui header">Star Trek Timelines Voyage Monitor v0.1.0</h2>
             <p>A tool to help with voyages in Star Trek Timelines</p>
 
             <p><b>DISCLAIMER</b> This tool is provided "as is", without warranty of any kind. Use at your own risk! It should be understood that <i>Star Trek Timelines</i> content and materials are trademarks and copyrights of <a href='https://www.disruptorbeam.com/tos/' target='_blank'>Disruptor Beam, Inc.</a> or its licensors. All rights reserved. This tool is neither endorsed by nor affiliated with Disruptor Beam, Inc.</p>
             <p>All images (crew portraits, items) displayed in the tool are references to <a href='https://stt.wiki/wiki/Main_Page' target='_blank'>stt.wiki</a>.</p>
 
-            <p>For feedback, bugs and other issues please use the <a href='https://github.com/IAmPicard/StarTrekTimelinesSpreadsheet/issues' target='_blank'>GitHub page</a>.</p>
+            <p>For details about this tool, see the <a href='https://github.com/IAmPicard/STTVoyage' target='_blank'>GitHub page</a>.</p>
+
+            <h3 className="ui teal header">
+                <div className="content">Your feedback is appreciated</div>
+            </h3>
+            <div className="ui form">
+                <div className="ui segment">
+                    <div className="field">
+                        <label>What would you like to see implemented next</label>
+                        <textarea rows={2} name="feature" placeholder="Your #1 feature request" onChange={(event: any) => this.userFeedback.feature = event.target.value } />
+                    </div>
+
+                    <div className="field">
+                        <label>Bug, or something you'd want to be implemented differently</label>
+                        <textarea rows={2} name="bug" placeholder="Your #1 annoyance" onChange={(event: any) => this.userFeedback.bug = event.target.value } />
+                    </div>
+
+                    <div className="field">
+                        <label>Any other feedback</label>
+                        <textarea rows={2} name="other" placeholder="" onChange={(event: any) => this.userFeedback.other = event.target.value } />
+                    </div>
+
+                    <div className="field">
+                        <label>(Optional) Your e-mail address</label>
+                        <input type="text" name="email" placeholder="" onChange={(event: any) => this.userFeedback.email = event.target.value } />
+                    </div>
+                    <div>I won't share this with anyone; I'll only use it to contact you if I have questions about your feedback</div>
+                    <br/>
+                    <div className="ui fluid teal submit button" onClick={this._sendFeedback}>Send feedback</div>
+                </div>
+            </div>
         </div>;
     }
 
