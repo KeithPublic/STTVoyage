@@ -28,7 +28,8 @@
         "source-map-loader": "latest",
         "ts-loader": "latest",
         "typescript": "latest",
-        "webpack": "latest"
+        "webpack": "latest",
+        "worker-loader": "^1.0.0"
     },
     "scripts": {
         "bundle": "node_modules/.bin/webpack"
