@@ -12,13 +12,17 @@ const skillRes: { [index: string]: { name: string, url: string } } = {
     'medicine_skill': { name: 'Medicine', url: 'https://stt.wiki/w/images/thumb/5/56/MED.png/18px-MED.png' }
 };
 
+function rgbToHex(r: number, g: number, b: number): string {
+    return "#" + ((b | g << 8 | r << 16) / 0x1000000).toString(16).substring(2);
+}
+
 const rarityRes = [
     { name: 'Basic', color: 'Grey' },
-    { name: 'Common', color: '#ddd' },
-    { name: 'Uncommon', color: '#682' },
-    { name: 'Rare', color: '#359' },
-    { name: 'Super Rare', color: '#b3f' },
-    { name: 'Legendary', color: 'gold' }
+    { name: 'Common', color: rgbToHex(155, 155, 155) },
+    { name: 'Uncommon', color: rgbToHex(80, 170, 60) },
+    { name: 'Rare', color: rgbToHex(90, 170, 255) },
+    { name: 'Super Rare', color: rgbToHex(170, 45, 235) },
+    { name: 'Legendary', color: rgbToHex(253, 210, 106) }
 ];
 
 interface IVoyageLogEntryProps {
