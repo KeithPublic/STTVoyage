@@ -272,10 +272,14 @@ export class VoyageLog extends React.Component<any, IVoyageLogState> {
                 </button>);
         }
         else {
-            return (<button className="ui right labeled icon button" onClick={() => this._recall()}>
-                <i className="right history icon"></i>
-                Recall now
-                </button>);
+            return (<div>
+                <button className="ui right labeled icon button" onClick={() => this._recall()}>
+                    <i className="right history icon"></i>
+                    Recall now
+                </button><br/><br/>
+                <div className="ui blue small label">Estimated time left: {Math.floor(this.state.voyage.hp / 11)} minutes</div>
+                <div className="ui blue small label">Estimated revival cost: {Math.floor((this.state.voyage.voyage_duration / 60 + this.state.voyage.hp / 11) / 5)} dilithium</div>
+            </div>);
         }
     }
 
