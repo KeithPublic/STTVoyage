@@ -233,11 +233,29 @@ export class VoyageLog extends React.Component<any, IVoyageLogState> {
                             rating.push(<i key={i} className='yellow star icon' />);
                         }
 
+                        let have: any = STTApi.roster.find((crew: any) => crew.symbol == loot.symbol);
+                        let duplicate: JSX.Element[] = [];
+                        let duplicateColor: string = 'red';
+                        if (have) {
+                            duplicate.push(<span>DUPLICATE</span>);
+
+                            for (let i = 0; i < have.rarity; i++) {
+                                duplicate.push(<i key={i} className='yellow star icon' />);
+                            }
+                            for (let i = 0; i < have.max_rarity - have.rarity; i++) {
+                                duplicate.push(<i key={i + 5} className='grey star icon' />);
+                            }
+
+                            if (have.max_rarity - have.rarity > 0) {
+                                duplicateColor = 'green';
+                            }
+                        }
+
                         return (<div className="item" key={index}>
                             <img className="ui avatar image" src={STTApi.crewAvatars.find((crew: any) => crew.id == loot.id).iconUrl} />
                             <div className="content">
                                 <div className="header" style={{ color: loot.rarity && rarityRes[loot.rarity].color }}>{loot.full_name}</div>
-                                <div className="description" style={{ color: 'red' }} >{rating} { STTApi.roster.find((crew: any) => crew.symbol == loot.symbol) ? 'DUPLICATE' : '' }</div>
+                                <div className="description" style={{ color: duplicateColor }} >{rating} {duplicate}</div>
                             </div>
                         </div>);
                     })}
@@ -277,8 +295,8 @@ export class VoyageLog extends React.Component<any, IVoyageLogState> {
                     <i className="right history icon"></i>
                     Recall now
                 </button><br/><br/>
-                <div className="ui blue small label">Estimated time left: {Math.floor(this.state.voyage.hp / 11)} minutes</div>
-                <div className="ui blue small label">Estimated revival cost: {Math.floor((this.state.voyage.voyage_duration / 60 + this.state.voyage.hp / 11) / 5)} dilithium</div>
+                <div className="ui blue small label">Estimated time left: {Math.floor(this.state.voyage.hp / 14)} minutes</div>
+                <div className="ui blue small label">Estimated revival cost: {Math.floor((this.state.voyage.voyage_duration / 60 + this.state.voyage.hp / 14) / 5)} dilithium</div>
             </div>);
         }
     }
