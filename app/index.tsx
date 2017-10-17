@@ -3,9 +3,10 @@ import * as ReactDOM from "react-dom";
 
 import { LoginDialog } from "./loginDialog";
 import { VoyageLog } from "./VoyageLog";
+import { FileImageCache } from "./FileImageCache";
 
 import STTApi from 'sttapi';
-import { loginSequence, getWikiImageUrl } from 'sttapi';
+import { CONFIG, loginSequence } from 'sttapi';
 
 enum Tab {
     VoyageLog,
@@ -63,6 +64,8 @@ class App extends React.Component<any, IAppState> {
 			nameSuggestion: 'VoyageMonitor 0.1.0',
 			email: '',
 		};
+
+        STTApi.setImageProvider(true, new FileImageCache());
 
         STTApi.loginWithCachedAccessToken().then((success) => {
             if (success) {
@@ -270,7 +273,7 @@ class App extends React.Component<any, IAppState> {
                 });
 
                 if (STTApi.playerData.character.crew_avatar) {
-                    getWikiImageUrl(STTApi.playerData.character.crew_avatar.name.split(' ').join('_') + '_Head.png', 0).then(({ id, url }) => {
+                    STTApi.imageProvider.getCrewImageUrl(STTApi.playerData.character.crew_avatar, false, 0).then(({ id, url }) => {
                         this.setState({ captainAvatarUrl: url });
                     }).catch((error) => { });
                 }

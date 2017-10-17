@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>STT Mobile Companion</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src * blob:; style-src * 'self' 'unsafe-inline'; font-src 'self' https: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+    <meta http-equiv="Content-Security-Policy" content="default-src * blob: ms-appdata:; style-src * 'self' 'unsafe-inline'; font-src 'self' https: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css">
     <style>
         body {
@@ -48,6 +48,7 @@
 
 <body>
     <div id="content"></div>
+    <script src="cordova.js"></script>
     <script src="scripts/bundle.js"></script>
 
     <script>
