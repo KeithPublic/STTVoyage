@@ -25,15 +25,6 @@ interface IAppState {
     currentTab: Tab;
 }
 
-const skillRes:{ [index:string] : {name: string, url: string} } = {
-    'command_skill': { name: 'Command', url: 'https://stt.wiki/w/images/thumb/6/6d/CMD.png/18px-CMD.png' },
-    'science_skill': { name: 'Science', url: 'https://stt.wiki/w/images/thumb/b/ba/SCI.png/18px-SCI.png' },
-    'security_skill': { name: 'Security', url: 'https://stt.wiki/w/images/thumb/c/c9/SEC.png/18px-SEC.png' },
-    'engineering_skill': { name: 'Engineering', url: 'https://stt.wiki/w/images/thumb/8/8b/ENG.png/18px-ENG.png' },
-    'diplomacy_skill': { name: 'Diplomacy', url: 'https://stt.wiki/w/images/thumb/5/58/DIP.png/18px-DIP.png' },
-    'medicine_skill': { name: 'Medicine', url: 'https://stt.wiki/w/images/thumb/5/56/MED.png/18px-MED.png' }
-};
-
 //https://semantic-ui.com/elements/image.html#size
 class App extends React.Component<any, IAppState> {
     userFeedback: any;
@@ -203,7 +194,7 @@ class App extends React.Component<any, IAppState> {
                 {Object.keys(STTApi.playerData.character.voyage[0].skill_aggregates).map((skillKey: any) => {
                     let skill = STTApi.playerData.character.voyage[0].skill_aggregates[skillKey];
                     return (<div className="item" key={skill.skill}>
-                        <img className="ui image skillImage" src={skillRes[skill.skill].url} />
+                        <img className="ui image skillImage" src={CONFIG.SPRITES['icon_' + skill.skill].url} />
 
                         <div className="content">
                             <div className="header">{skill.core} ({skill.range_min}-{skill.range_max})</div>

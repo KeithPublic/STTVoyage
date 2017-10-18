@@ -2,15 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import STTApi from 'sttapi';
-
-const skillRes: { [index: string]: { name: string, url: string } } = {
-    'command_skill': { name: 'Command', url: 'https://stt.wiki/w/images/thumb/6/6d/CMD.png/18px-CMD.png' },
-    'science_skill': { name: 'Science', url: 'https://stt.wiki/w/images/thumb/b/ba/SCI.png/18px-SCI.png' },
-    'security_skill': { name: 'Security', url: 'https://stt.wiki/w/images/thumb/c/c9/SEC.png/18px-SEC.png' },
-    'engineering_skill': { name: 'Engineering', url: 'https://stt.wiki/w/images/thumb/8/8b/ENG.png/18px-ENG.png' },
-    'diplomacy_skill': { name: 'Diplomacy', url: 'https://stt.wiki/w/images/thumb/5/58/DIP.png/18px-DIP.png' },
-    'medicine_skill': { name: 'Medicine', url: 'https://stt.wiki/w/images/thumb/5/56/MED.png/18px-MED.png' }
-};
+import { CONFIG } from 'sttapi';
 
 function rgbToHex(r: number, g: number, b: number): string {
     return "#" + ((b | g << 8 | r << 16) / 0x1000000).toString(16).substring(2);
@@ -56,7 +48,7 @@ class VoyageLogEntry extends React.Component<any, IVoyageLogEntryProps> {
                 <div className='summary'>
                     {this.props.entry.skill_check && (
                         <span>
-                            <img className="ui image skillImage" src={skillRes[this.props.entry.skill_check.skill].url} />
+                            <img className="ui image skillImage" src={CONFIG.SPRITES['icon_' + this.props.entry.skill_check.skill].url} />
                             {(this.props.entry.skill_check.passed == true) ? <i className='check circle icon' /> : <i className='minus circle icon' />}
                         </span>
                     )}
@@ -209,7 +201,7 @@ export class VoyageLog extends React.Component<any, IVoyageLogState> {
                 <div className="ui middle aligned selection list inverted">
                     {this.state.voyage.dilemma.resolutions.map((resolution: any, index: number) => {
                         return (<div className="item" key={index} onClick={() => this._chooseDilemma(this.state.voyage.id, this.state.voyage.dilemma.id, index)}>
-                            <img className="ui image skillImage" style={{ display: 'inline-block' }} src={skillRes[resolution.skill].url} />
+                            <img className="ui image skillImage" style={{ display: 'inline-block' }} src={CONFIG.SPRITES['icon_' + resolution.skill].url} />
                             <div className="content">
                                 <div className="header"><span dangerouslySetInnerHTML={{ __html: resolution.option }} /></div>
                             </div>
@@ -295,8 +287,8 @@ export class VoyageLog extends React.Component<any, IVoyageLogState> {
                     <i className="right history icon"></i>
                     Recall now
                 </button><br/><br/>
-                <div className="ui blue small label">Estimated time left: {Math.floor(this.state.voyage.hp / 14)} minutes</div>
-                <div className="ui blue small label">Estimated revival cost: {Math.floor((this.state.voyage.voyage_duration / 60 + this.state.voyage.hp / 14) / 5)} dilithium</div>
+                <div className="ui blue small label">Estimated time left: {Math.floor(this.state.voyage.hp / 21)} minutes</div>
+                <div className="ui blue small label">Estimated revival cost: {Math.floor((this.state.voyage.voyage_duration / 60 + this.state.voyage.hp / 21) / 5)} dilithium</div>
             </div>);
         }
     }
