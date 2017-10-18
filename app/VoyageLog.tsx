@@ -137,15 +137,29 @@ export class VoyageLog extends React.Component<any, IVoyageLogState> {
                     }
                 }
 
-                this.setState({
-                    dataLoaded: true,
-                    voyage: STTApi.playerData.character.voyage[0],
-                    antimatter: STTApi.playerData.character.voyage[0].hp,
-                    voyageNarrative: voyageNarrative,
-                    lastDilemmaNotification: STTApi.playerData.character.voyage[0].dilemma ? STTApi.playerData.character.voyage[0].dilemma.id : 0
+                // Fill in icons for all the loot (should be fast since we pre-cached most items' icons)
+                let iconPromises: Array<Promise<void>> = [];
+                STTApi.playerData.character.voyage[0].pending_rewards.loot.forEach((loot: any) => {
+                    if (loot.type == 2) {
+                        loot.iconUrl = '';
+                        iconPromises.push(STTApi.imageProvider.getItemImageUrl(loot, loot.id).then((found) => {
+                            let loot = STTApi.playerData.character.voyage[0].pending_rewards.loot.find((item: any) => item.id == found.id);
+                            loot.iconUrl = found.url;
+                        }));
+                    }
                 });
 
-                this.animateAntimatter();
+                Promise.all(iconPromises).then(() => {
+                    this.setState({
+                        dataLoaded: true,
+                        voyage: STTApi.playerData.character.voyage[0],
+                        antimatter: STTApi.playerData.character.voyage[0].hp,
+                        voyageNarrative: voyageNarrative,
+                        lastDilemmaNotification: STTApi.playerData.character.voyage[0].dilemma ? STTApi.playerData.character.voyage[0].dilemma.id : 0
+                    });
+
+                    this.animateAntimatter();
+                });
             });
         }
     }
@@ -256,13 +270,18 @@ export class VoyageLog extends React.Component<any, IVoyageLogState> {
 
                 <div className="ui inverted segment">
                     {this.state.voyage.pending_rewards.loot.filter((loot: any) => loot.type == 2).map((loot: any, index: number) => {
-                        return (<span key={index} style={{ color: loot.rarity && rarityRes[loot.rarity].color }}>{loot.quantity} {(loot.rarity == null) ? '' : rarityRes[loot.rarity].name} {loot.full_name}</span>);
+                        return (<span key={index} style={{ color: loot.rarity && rarityRes[loot.rarity].color }}>
+                            <img src={loot.iconUrl} className="ui inline image skillImage" />
+                            {loot.quantity} {(loot.rarity == null) ? '' : rarityRes[loot.rarity].name} {loot.full_name}
+                            </span>);
                     }).reduce((prev: any, curr: any) => [prev, ', ', curr])}
                 </div>
 
                 <div className="ui inverted segment">
                     {this.state.voyage.pending_rewards.loot.filter((loot: any) => loot.type == 3).map((loot: any, index: number) => {
-                        return (<span key={index} style={{ color: loot.rarity && rarityRes[loot.rarity].color }}>{loot.quantity} {(loot.rarity == null) ? '' : rarityRes[loot.rarity].name} {loot.full_name}</span>);
+                        return (<span key={index} style={{ color: loot.rarity && rarityRes[loot.rarity].color }}>
+                            {loot.quantity} {(loot.rarity == null) ? '' : rarityRes[loot.rarity].name} {loot.full_name}
+                            </span>);
                     }).reduce((prev: any, curr: any) => [prev, ', ', curr])}
                 </div>
             </div>);

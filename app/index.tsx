@@ -109,34 +109,34 @@ class App extends React.Component<any, IAppState> {
                                         <br/><br/>
 
                                         <div className="ui label black">
-                                            <img src="https://stt.wiki/w/images/thumb/1/12/Chroniton_icon.png/24px-Chroniton_icon.png" className="ui inline image" />&nbsp;
+                                            <img src={CONFIG.SPRITES['energy_icon'].url} className="ui inline image" />&nbsp;
                                             {Math.min(Math.floor(STTApi.playerData.character.seconds_from_replay_energy_basis / STTApi.playerData.character.replay_energy_rate), STTApi.playerData.character.replay_energy_max) + STTApi.playerData.character.replay_energy_overflow}
                                         </div>
 
                                         <div className="ui label black">
-                                            <img src="https://stt.wiki/w/images/thumb/1/1c/Dilithium_sm.png/19px-Dilithium_sm.png" className="ui inline image" />&nbsp;
+                                            <img src={CONFIG.SPRITES['images_currency_pp_currency_0'].url} className="ui inline image" />&nbsp;
                                             {STTApi.playerData.premium_purchasable}
                                         </div>
 
                                         <div className="ui label black">
-                                            <img src="https://stt.wiki/w/images/thumb/2/20/Merit_icon.png/22px-Merit_icon.png" className="ui inline image" />&nbsp;
+                                            <img src={CONFIG.SPRITES['images_currency_pe_currency_0'].url} className="ui inline image" />&nbsp;
                                             {STTApi.playerData.premium_earnable}
                                         </div>
 
                                         <br/><br/>
 
                                         <div className="ui label black">
-                                            <img src="https://stt.wiki/w/images/thumb/d/d4/Honor.png/24px-Honor.png" className="ui inline image" />&nbsp;
+                                            <img src={CONFIG.SPRITES['images_currency_honor_currency_0'].url} className="ui inline image" />&nbsp;
                                             {STTApi.playerData.honor}
                                         </div>
 
                                         <div className="ui label black">
-                                            <img src="https://stt.wiki/w/images/thumb/9/91/Credits_sm.png/24px-Credits_sm.png" className="ui inline image" />&nbsp;
+                                            <img src={CONFIG.SPRITES['images_currency_sc_currency_0'].url} className="ui inline image" />&nbsp;
                                             {STTApi.playerData.money}
                                         </div>
 
                                         <div className="ui label black">
-                                            <img src="https://stt.wiki/w/images/thumb/1/1e/Ticket.png/18px-Ticket.png" className="ui inline image" />&nbsp;
+                                            <img src={CONFIG.SPRITES['cadet_icon'].url} className="ui inline image" />&nbsp;
                                             {STTApi.playerData.character.cadet_tickets.current} / {STTApi.playerData.character.cadet_tickets.max}
                                         </div>
 
@@ -212,13 +212,10 @@ class App extends React.Component<any, IAppState> {
 
     _renderFeedbackPage() {
         return <div className="ui text container">
-            <h2 className="ui header">Star Trek Timelines Voyage Monitor v0.1.0</h2>
+            <h2 className="ui header">Star Trek Timelines Voyage Monitor v0.1.5</h2>
             <p>A tool to help with voyages in Star Trek Timelines</p>
-
             <p><b>DISCLAIMER</b> This tool is provided "as is", without warranty of any kind. Use at your own risk! It should be understood that <i>Star Trek Timelines</i> content and materials are trademarks and copyrights of <a href='https://www.disruptorbeam.com/tos/' target='_blank'>Disruptor Beam, Inc.</a> or its licensors. All rights reserved. This tool is neither endorsed by nor affiliated with Disruptor Beam, Inc.</p>
-            <p>All images (crew portraits, items) displayed in the tool are references to <a href='https://stt.wiki/wiki/Main_Page' target='_blank'>stt.wiki</a>.</p>
-
-            <p>For details about this tool, see the <a href='https://github.com/IAmPicard/STTVoyage' target='_blank'>GitHub page</a>.</p>
+            <p>For details about this tool, see the <a href='https://github.com/IAmPicard/STTVoyage' target='_blank'>GitHub page</a>. For information about other tools for Star Trek Timelines, see <a href='https://iampicard.github.io/' target='_blank'>here</a>.</p>
 
             <h3 className="ui teal header">
                 <div className="content">Your feedback is appreciated</div>
