@@ -12,6 +12,8 @@ export interface ILoginDialogState {
     showSpinner: boolean;
     username: string;
     password: string;
+    facebookAccessToken: string | undefined;
+    facebookUserId: string | undefined;
 }
 
 export class LoginDialog extends React.Component<ILoginDialogProps, ILoginDialogState> {
@@ -22,10 +24,13 @@ export class LoginDialog extends React.Component<ILoginDialogProps, ILoginDialog
             autoLogin: true,
             showSpinner: false,
             username: '',
-            password: ''
+            password: '',
+            facebookAccessToken: undefined,
+            facebookUserId: undefined
         };
 
         this._closeDialog = this._closeDialog.bind(this);
+        this._facebookLogin = this._facebookLogin.bind(this);
     }
 
     render() {
@@ -58,6 +63,8 @@ export class LoginDialog extends React.Component<ILoginDialogProps, ILoginDialog
                         </div>
                     </div>
                     <div className="ui fluid large teal submit button" onClick={this._closeDialog}>Login</div>
+                    <br/>
+                    <div className="ui fluid large teal submit button" onClick={this._facebookLogin}>Login with Facebook...</div>
                 </div>
             </div>
 
@@ -76,13 +83,67 @@ export class LoginDialog extends React.Component<ILoginDialogProps, ILoginDialog
     _closeDialog() {
         this.setState({ showSpinner: true, errorMessage: undefined });
 
-        STTApi.login(this.state.username, this.state.password, this.state.autoLogin).then(() => {
-            this.setState({ showSpinner: false });
+        let promiseLogin: Promise<void>;
+        if (this.state.facebookAccessToken) {
+            promiseLogin = STTApi.loginWithFacebook(this.state.facebookAccessToken, this.state.facebookUserId, this.state.autoLogin);
+        }
+        else {
+            promiseLogin = STTApi.login(this.state.username, this.state.password, this.state.autoLogin);
+        }
 
+        promiseLogin.then(() => {
+            this.setState({ showSpinner: false });
             this.props.onAccessToken();
         })
-        .catch((error: string) => {
-            this.setState({ showSpinner: false, errorMessage: error });
+            .catch((error: string) => {
+                this.setState({ showSpinner: false, errorMessage: error });
+            });
+    }
+
+    _facebookLogin() {
+        var options = {
+            client_id: "322613001274224",
+            scopes: "public_profile",
+            redirect_uri: "https://www.facebook.com/connect/login_success.html"
+        };
+
+        let facebookAuthURL: string = "https://www.facebook.com/v2.8/dialog/oauth?client_id=" + options.client_id + "&redirect_uri=" + options.redirect_uri + "&response_type=token,granted_scopes&scope=" + options.scopes + "&display=popup";
+        let authWindow = cordova.InAppBrowser.open(facebookAuthURL, '_blank', 'location=no,hidden=yes');
+
+        authWindow.addEventListener('loadstop', () => {
+            authWindow.show();
+        });
+
+        authWindow.addEventListener('loadstart', (location) => {
+            var raw_code = /access_token=([^&]*)/.exec(location.url) || null;
+            var access_token = (raw_code && raw_code.length > 1) ? raw_code[1] : null;
+            var error = /\?error=(.+)$/.exec(location.url);
+
+            if (access_token) {
+                STTApi.networkHelper.get("https://graph.facebook.com/me",
+                    {
+                        access_token: access_token,
+                        fields: 'id,name'
+                    }).then((data: any) => {
+                        this.setState({
+                            facebookAccessToken: access_token,
+                            facebookUserId: data.id
+                        }, () => {
+                            this._closeDialog();
+                        });
+                    });
+
+                authWindow.close();
+            }
+            else {
+                if (location.url.indexOf('www.facebook.com/v2.8/dialog') == -1) {
+                    this.setState({ errorMessage: 'Unable to authenticate with Facebook: ' + error });
+                }
+            }
+        });
+
+        authWindow.addEventListener('exit', () => {
+            // Display an error ?
         });
     }
 }

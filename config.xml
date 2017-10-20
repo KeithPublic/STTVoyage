@@ -14,4 +14,5 @@
     <engine name="windows" spec="^5.0.0" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />
 </widget>

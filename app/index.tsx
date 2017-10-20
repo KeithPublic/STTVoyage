@@ -36,6 +36,7 @@ class App extends React.Component<any, IAppState> {
         this._renderVoyageLogPage = this._renderVoyageLogPage.bind(this);
         this._renderFeedbackPage = this._renderFeedbackPage.bind(this);
         this._sendFeedback = this._sendFeedback.bind(this);
+        this._logOut = this._logOut.bind(this);
 
         this.state = {
             showSpinner: false,
@@ -142,7 +143,7 @@ class App extends React.Component<any, IAppState> {
 
                                         <br/><br/>
 
-                                        <button className="ui primary button" onClick={() => this.setState({loggedIn: false})}>Logout</button>
+                                        <button className="ui primary button" onClick={() => this._logOut()}>Logout</button>
                                     </div>
                                 </div>
                             </div>
@@ -160,6 +161,11 @@ class App extends React.Component<any, IAppState> {
                 </div>
             )}
         </div>);
+    }
+
+    _logOut() {
+        this.setState({loggedIn: false, dataLoaded: false});
+		STTApi.refreshEverything(true);
     }
 
     _renderVoyageLogPage() {
